@@ -30,12 +30,8 @@ Store these in a password manager and in an offline recovery record:
 
 The encrypted cloud backup should include a copy of the exact Immich `.env`
 used for that backup generation. Git should only contain `.env.example`.
-## Outlook backup reports
+## Tencent SES backup reports
 
-Copy `config/outlook-graph.env.example` to
-`/home/ashton/.config/homeoss/outlook-graph.env`, add the Microsoft application
-client ID, and set mode `0600`. Run
-`sudo /usr/local/sbin/send-backup-report --authorize` once to grant delegated
-`Mail.Send` access. The resulting refresh token is stored at
-`/home/ashton/.config/homeoss/outlook-graph-token.json` with mode `0600`.
-Never commit either live file.
+The backup report sender reads Tencent CAM credentials from
+`/home/ashton/.config/homeoss/tencent-ses.env`. Keep this file mode `0600` and
+never commit it. The CAM user needs only permission to call `ses:SendEmail`.
