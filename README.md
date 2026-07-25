@@ -21,11 +21,14 @@ this repository.
 the critical Immich originals and configuration, encrypts the stream with Age,
 splits it into 3.9 GB parts, and uploads through the OpenList HTTP API.
 
-Install the monthly systemd timer with:
+Install the systemd timer with:
 
 ```bash
 sudo ./scripts/install-backup-service.sh
 ```
+
+The timer wakes every Tuesday at 04:00 and runs on even ISO week numbers,
+resulting in one backup every two weeks.
 
 ## Fresh-machine recovery
 
