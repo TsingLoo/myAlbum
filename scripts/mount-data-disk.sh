@@ -27,7 +27,7 @@ if [[ -z ${uuid} ]]; then
 fi
 
 install -d -m 0755 "${mountpoint}"
-entry="UUID=${uuid} ${mountpoint} ext4 defaults,noatime,nofail,x-systemd.device-timeout=10s 0 2"
+entry="UUID=${uuid} ${mountpoint} ext4 defaults,noatime,nofail,x-systemd.automount,x-systemd.device-bound,x-systemd.device-timeout=10s 0 2"
 
 if ! grep -qE "[[:space:]]${mountpoint//\//\\/}[[:space:]]" /etc/fstab; then
   printf '%s\n' "${entry}" >>/etc/fstab

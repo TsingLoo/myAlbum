@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="block", ENV{ID_FS_UUID}=="8551ca9f-2f26-4af4-8802-8628e5e0a7e8", TAG+="systemd", ENV{SYSTEMD_WANTS}+="immich-disk-hotplug.service"

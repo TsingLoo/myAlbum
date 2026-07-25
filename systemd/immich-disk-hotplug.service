@@ -1,0 +1,8 @@
+[Unit]
+Description=Mount the Immich USB disk and restart Immich after hotplug
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/immich-disk-hotplug

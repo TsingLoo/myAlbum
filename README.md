@@ -10,6 +10,7 @@ Reproducible configuration for the Debian home photo server at
 - Immich on port `2283`
 - OpenList on port `5244`
 - Immich media on an ext4 USB disk mounted at `/srv/immich-data`
+- UUID-based systemd automount and udev recovery after USB disk reinsertion
 - PostgreSQL data on the internal SSD at `/var/lib/immich-postgres`
 
 No passwords, cloud tokens, databases, photos, or generated backups belong in
