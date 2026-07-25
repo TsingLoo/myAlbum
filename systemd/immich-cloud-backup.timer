@@ -2,8 +2,9 @@
 Description=Run the encrypted Immich cloud backup monthly
 
 [Timer]
-OnCalendar=Tue *-*-* 04:00:00
+OnCalendar=Tue *-*-* 03:00:00
 Persistent=true
+RandomizedDelaySec=30m
 Unit=immich-cloud-backup.service
 
 [Install]

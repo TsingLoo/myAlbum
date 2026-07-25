@@ -27,8 +27,7 @@ Install the systemd timer with:
 sudo ./scripts/install-backup-service.sh
 ```
 
-The timer wakes every Tuesday at 04:00 and runs on even ISO week numbers,
-resulting in one backup every two weeks.
+The timer runs every Tuesday at 03:00 with a random delay of up to 30 minutes.
 
 ## Fresh-machine recovery
 
