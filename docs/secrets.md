@@ -28,3 +28,8 @@ Store these in a password manager and in an offline recovery record:
 
 The encrypted cloud backup should include a copy of the exact Immich `.env`
 used for that backup generation. Git should only contain `.env.example`.
+# Outlook backup reports
+
+Copy `config/outlook-smtp.env.example` to
+`/home/ashton/.config/homeoss/outlook-smtp.env`, replace the placeholder with
+a Microsoft app password, and set mode `0600`. Never commit the real file.
