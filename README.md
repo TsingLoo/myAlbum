@@ -13,6 +13,8 @@ Reproducible configuration for the Debian home photo server at
 - UUID-based systemd automount and udev recovery after USB disk reinsertion
 - PostgreSQL data on the internal SSD at `/var/lib/immich-postgres`
 - Pinned Immich release and machine-learning model selection
+- Elastic internal-SSD share at `/srv/family-share`
+- Backup working data on the external disk at `/srv/immich-data/.backup-work`
 
 No passwords, cloud tokens, databases, photos, or generated backups belong in
 this repository.
@@ -29,7 +31,10 @@ Install the systemd timer with:
 sudo ./scripts/install-backup-service.sh
 ```
 
-The timer runs every Tuesday at 03:00 with a random delay of up to 30 minutes.
+The first run is scheduled for 2026-07-26 at 03:00. After a successful run,
+the timer runs every other Tuesday at 03:00. Each run has a random delay of up
+to 30 minutes. Failed runs leave the success marker unchanged so the next
+Tuesday can retry.
 
 ## Fresh-machine recovery
 

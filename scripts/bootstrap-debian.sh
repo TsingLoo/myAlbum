@@ -31,5 +31,8 @@ systemctl enable --now docker
 
 install -d -m 0755 /opt/immich /opt/openlist
 install -d -m 0700 /var/lib/immich-postgres
+getent group familyshare >/dev/null || groupadd --system familyshare
+getent passwd ashton >/dev/null && usermod -aG familyshare ashton
+install -d -m 2770 -o root -g familyshare /srv/family-share
 
 echo "Docker installation complete."

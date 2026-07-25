@@ -7,7 +7,9 @@ readonly secret_file=/home/ashton/.config/homeoss/openlist-backup.env
 readonly age_identity=/home/ashton/.config/homeoss/backup-age-key.txt
 readonly age_recipient=/home/ashton/.config/homeoss/backup-age-recipient.txt
 readonly report_sender=/usr/local/sbin/send-backup-report
-readonly work_root=/var/backups/immich-cloud
+# Keep large transient archives off the internal system SSD.
+readonly work_root=/srv/immich-data/.backup-work
+readonly success_state=/var/lib/homeoss/immich-cloud-backup.last-success
 readonly generation="immich-$(date +%Y-%m-%dT%H%M%S)"
 readonly work_dir="${work_root}/${generation}"
 readonly parts_dir="${work_dir}/parts"
@@ -267,4 +269,6 @@ log "Remote size verification passed"
 stage=cleanup
 rm -rf -- "${work_dir}"
 stage=complete
+install -d -m 0755 "$(dirname "${success_state}")"
+touch "${success_state}"
 log "Backup ${generation} completed successfully"

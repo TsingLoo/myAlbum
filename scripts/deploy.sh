@@ -20,6 +20,10 @@ fi
 
 install -d -m 0755 /opt/immich /opt/openlist
 install -d -m 0755 /srv/immich-data/immich
+install -d -m 0700 /srv/immich-data/.backup-work
+getent group familyshare >/dev/null || groupadd --system familyshare
+getent passwd ashton >/dev/null && usermod -aG familyshare ashton
+install -d -m 2770 -o root -g familyshare /srv/family-share
 install -d -m 0700 /var/lib/immich-postgres
 
 install -m 0644 "${repo_dir}/services/immich/docker-compose.yml" \

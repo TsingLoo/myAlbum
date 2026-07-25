@@ -1,7 +1,10 @@
 [Unit]
-Description=Run the encrypted Immich cloud backup monthly
+Description=Run the first and biweekly encrypted Immich cloud backups
 
 [Timer]
+# One-time first run, then a weekly Tuesday opportunity. ExecCondition applies
+# the 13-day successful-backup gate, producing a biweekly Tuesday schedule.
+OnCalendar=2026-07-26 03:00:00
 OnCalendar=Tue *-*-* 03:00:00
 Persistent=true
 RandomizedDelaySec=30m
