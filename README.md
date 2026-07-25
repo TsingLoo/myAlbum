@@ -19,7 +19,7 @@ this repository.
 
 `scripts/immich-cloud-backup.sh` creates a consistent PostgreSQL dump, archives
 the critical Immich originals and configuration, encrypts the stream with Age,
-splits it into 3.9 GB parts, and uploads through the OpenList HTTP API.
+splits it into 1 GiB parts, and uploads through the OpenList HTTP API.
 
 Install the systemd timer with:
 

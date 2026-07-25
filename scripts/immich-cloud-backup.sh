@@ -100,7 +100,7 @@ tar \
   backup-info.txt |
   zstd -1 -T0 |
   age -R "${age_recipient}" |
-  split -b 3900M -d -a 3 - \
+  split -b 1G -d -a 3 - \
     "${parts_dir}/${generation}.tar.zst.age.part-"
 
 restart_immich
