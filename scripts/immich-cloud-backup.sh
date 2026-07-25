@@ -83,6 +83,7 @@ docker exec immich_postgres pg_dump \
 
 log "Archiving originals, database, and deployment configuration"
 tar \
+  -c \
   --numeric-owner \
   --warning=no-file-changed \
   -C / \
