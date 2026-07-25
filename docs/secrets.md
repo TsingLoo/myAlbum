@@ -28,8 +28,12 @@ Store these in a password manager and in an offline recovery record:
 
 The encrypted cloud backup should include a copy of the exact Immich `.env`
 used for that backup generation. Git should only contain `.env.example`.
-# Outlook backup reports
+## Outlook backup reports
 
-Copy `config/outlook-smtp.env.example` to
-`/home/ashton/.config/homeoss/outlook-smtp.env`, replace the placeholder with
-a Microsoft app password, and set mode `0600`. Never commit the real file.
+Copy `config/outlook-graph.env.example` to
+`/home/ashton/.config/homeoss/outlook-graph.env`, add the Microsoft application
+client ID, and set mode `0600`. Run
+`sudo /usr/local/sbin/send-backup-report --authorize` once to grant delegated
+`Mail.Send` access. The resulting refresh token is stored at
+`/home/ashton/.config/homeoss/outlook-graph-token.json` with mode `0600`.
+Never commit either live file.
