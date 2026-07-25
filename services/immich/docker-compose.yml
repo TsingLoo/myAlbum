@@ -25,6 +25,13 @@ services:
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
     dns:
       - 192.168.30.1
+    environment:
+      MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-B-32__openai
+      MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-B-32__openai
+      MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__DETECTION: buffalo_l
+      MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__RECOGNITION: buffalo_l
+      MACHINE_LEARNING_PRELOAD__OCR__DETECTION: PP-OCRv5_mobile
+      MACHINE_LEARNING_PRELOAD__OCR__RECOGNITION: PP-OCRv5_mobile
     volumes:
       - model-cache:/cache
     env_file:
