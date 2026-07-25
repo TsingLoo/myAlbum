@@ -12,6 +12,7 @@ Reproducible configuration for the Debian home photo server at
 - Immich media on an ext4 USB disk mounted at `/srv/immich-data`
 - UUID-based systemd automount and udev recovery after USB disk reinsertion
 - PostgreSQL data on the internal SSD at `/var/lib/immich-postgres`
+- Pinned Immich release and machine-learning model selection
 
 No passwords, cloud tokens, databases, photos, or generated backups belong in
 this repository.
@@ -54,6 +55,7 @@ The timer runs every Tuesday at 03:00 with a random delay of up to 30 minutes.
    encrypted OpenList configuration backup outside Git.
 
 See [docs/restore.md](docs/restore.md) for the full restore order.
+See [docs/immich-ai.md](docs/immich-ai.md) for AI model and state persistence.
 
 ## Updating the live server
 

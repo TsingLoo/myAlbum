@@ -33,7 +33,13 @@ Restore these folders to `/srv/immich-data/immich`:
 
 Use Immich's supported restore workflow to restore the matching `.sql.gz`
 database dump. The filesystem and database must come from the same backup
-generation. Restore the files first, then the database.
+generation. Restore the files first, then the database. The database also
+restores Immich administrator settings, job state, face assignments, OCR
+results, smart-search embeddings, albums, users, and asset metadata.
+
+Machine-learning model files are a disposable Docker cache and are not included
+in the cloud archive. The pinned models in the Compose file are downloaded
+again automatically. See `docs/immich-ai.md`.
 
 ## 4. Restore OpenList
 
