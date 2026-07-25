@@ -1,0 +1,5 @@
+# Merge this top-level mapping into /etc/mihomo/config.yaml.
+# LAN DNS port 53 is redirected to Mihomo on this router, so the dnsmasq
+# address record alone is not visible to LAN clients.
+hosts:
+  myhome.server: 192.168.30.136

@@ -1,0 +1,10 @@
+# Apply on OpenWrt after confirming the host section index:
+# uci set dhcp.@host[0].name='myhome'
+# uci add_list dhcp.@dnsmasq[0].address='/myhome.server/192.168.30.136'
+# uci commit dhcp
+# /etc/init.d/dnsmasq restart
+
+dhcp.@host[0].name='myhome'
+dhcp.@host[0].ip='192.168.30.136'
+dhcp.@host[0].mac='00:E0:4C:E3:9D:06'
+dhcp.@dnsmasq[0].address='/myhome.server/192.168.30.136'
