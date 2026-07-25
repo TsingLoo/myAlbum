@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the encrypted Immich cloud backup monthly
+
+[Timer]
+OnCalendar=*-*-01 03:00:00
+Persistent=true
+RandomizedDelaySec=30m
+Unit=immich-cloud-backup.service
+
+[Install]
+WantedBy=timers.target

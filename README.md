@@ -15,6 +15,18 @@ Reproducible configuration for the Debian home photo server at
 No passwords, cloud tokens, databases, photos, or generated backups belong in
 this repository.
 
+## Cloud backup
+
+`scripts/immich-cloud-backup.sh` creates a consistent PostgreSQL dump, archives
+the critical Immich originals and configuration, encrypts the stream with Age,
+splits it into 3.9 GB parts, and uploads through the OpenList HTTP API.
+
+Install the monthly systemd timer with:
+
+```bash
+sudo ./scripts/install-backup-service.sh
+```
+
 ## Fresh-machine recovery
 
 1. Install Debian 13 with the SSH server and standard system utilities.
