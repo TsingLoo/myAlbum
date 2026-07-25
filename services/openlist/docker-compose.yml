@@ -1,6 +1,6 @@
 services:
   openlist:
-    image: openlistteam/openlist:latest
+    image: openlistteam/openlist:${OPENLIST_VERSION:-latest}
     container_name: openlist
     user: "${OPENLIST_UID:-1000}:${OPENLIST_GID:-1000}"
     volumes:
