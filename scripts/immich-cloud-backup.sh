@@ -73,6 +73,8 @@ docker exec immich_postgres pg_dump \
   --dbname="${DB_DATABASE_NAME}" |
   gzip -1 >"${work_dir}/database.sql.gz"
 
+restart_immich
+
 {
   printf 'generation=%s\n' "${generation}"
   printf 'created=%s\n' "$(date --iso-8601=seconds)"
@@ -81,7 +83,7 @@ docker exec immich_postgres pg_dump \
   printf 'age_recipient=%s\n' "$(cat "${age_recipient}")"
 } >"${work_dir}/backup-info.txt"
 
-log "Archiving originals, database, and deployment configuration"
+log "Archiving originals, database, and deployment configuration while Immich is online"
 tar \
   -c \
   --numeric-owner \
