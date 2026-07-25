@@ -1,0 +1,13 @@
+services:
+  openlist:
+    image: openlistteam/openlist:latest
+    container_name: openlist
+    user: "${OPENLIST_UID:-1000}:${OPENLIST_GID:-1000}"
+    volumes:
+      - ./data:/opt/openlist/data
+    ports:
+      - "5244:5244"
+    environment:
+      - UMASK=077
+      - TZ=Asia/Hong_Kong
+    restart: unless-stopped

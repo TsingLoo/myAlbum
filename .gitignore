@@ -1,0 +1,21 @@
+# Secrets and runtime state
+**/.env
+!**/.env.example
+**/*.secret
+**/*.token
+**/data/
+**/backups/
+**/*.db
+**/*.sqlite*
+
+# Generated archives and logs
+*.age
+*.tar
+*.tar.zst
+*.part-*
+*.log
+
+# Local tooling
+.idea/
+.vscode/
+.DS_Store
