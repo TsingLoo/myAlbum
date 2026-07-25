@@ -1,0 +1,13 @@
+[Unit]
+Description=Use Wi-Fi only when the wired Ethernet link is unavailable
+After=networking.service
+Wants=networking.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/wired-wifi-failover
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

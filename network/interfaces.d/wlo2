@@ -1,0 +1,4 @@
+# Controlled by wired-wifi-failover.service; do not add allow-hotplug.
+iface wlo2 inet dhcp
+    wpa-conf /etc/wpa_supplicant/wpa_supplicant-wlo2.conf
+    metric 200
