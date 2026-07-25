@@ -15,6 +15,7 @@ Reproducible configuration for the Debian home photo server at
 - Pinned Immich release and machine-learning model selection
 - Elastic internal-SSD share at `/srv/family-share`
 - Backup working data on the external disk at `/srv/immich-data/.backup-work`
+- SMB, NFS, WebDAV, and SFTP access to the family share
 
 No passwords, cloud tokens, databases, photos, or generated backups belong in
 this repository.

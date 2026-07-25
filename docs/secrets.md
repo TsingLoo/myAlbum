@@ -26,6 +26,7 @@ Store these in a password manager and in an offline recovery record:
 - China Mobile Cloud account recovery details
 - backup encryption private key
 - Wi-Fi PSKs in `/etc/wpa_supplicant/wpa_supplicant-wlo2.conf`
+- Samba account database and the WebDAV htpasswd file
 
 The encrypted cloud backup should include a copy of the exact Immich `.env`
 used for that backup generation. Git should only contain `.env.example`.

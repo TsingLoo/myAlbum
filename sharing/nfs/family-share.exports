@@ -1,0 +1,1 @@
+/srv/family-share 192.168.30.0/24(rw,sync,no_subtree_check,root_squash)
