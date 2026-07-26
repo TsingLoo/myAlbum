@@ -1,0 +1,11 @@
+[Unit]
+Description=Check the daily Kopia local snapshot
+
+[Timer]
+OnCalendar=*-*-* @KOPIA_LOCAL_HEALTHCHECK_TIME@:00 @SCHEDULE_TIMEZONE@
+RandomizedDelaySec=@KOPIA_LOCAL_HEALTHCHECK_RANDOM_DELAY@
+Persistent=true
+Unit=kopia-snapshot-healthcheck.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,19 @@
+services:
+  healthchecks:
+    image: healthchecks/healthchecks:v4.3
+    container_name: healthchecks
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      ALLOWED_HOSTS: myhome.server,192.168.30.136,127.0.0.1,localhost
+      DB: sqlite
+      DB_NAME: /data/hc.sqlite
+      DEBUG: "False"
+      REGISTRATION_OPEN: "False"
+      SECRET_KEY: ${HEALTHCHECKS_SECRET_KEY}
+      SITE_NAME: HomeOSS Tasks
+      SITE_ROOT: http://myhome.server:8000
+      TZ: Asia/Hong_Kong
+    volumes:
+      - /opt/healthchecks/data:/data

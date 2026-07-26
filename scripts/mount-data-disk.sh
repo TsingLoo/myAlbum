@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+storage_config=${HOMEOSS_STORAGE_CONFIG:-${repo_dir}/config/storage.env}
+source "${storage_config}"
+
 device=${1:-}
-mountpoint=/srv/immich-data
+mountpoint=${STORAGE_ROOT}
 
 if [[ ${EUID} -ne 0 ]]; then
   echo "Run this script with sudo." >&2

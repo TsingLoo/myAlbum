@@ -2,33 +2,37 @@
 set -Eeuo pipefail
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+source "${repo_dir}/config/storage.env"
 
 if [[ ${EUID} -ne 0 ]]; then
   echo "Run this script with sudo." >&2
   exit 1
 fi
 
-if ! findmnt --mountpoint /srv/immich-data >/dev/null; then
-  echo "Refusing to deploy: /srv/immich-data is not mounted." >&2
+if ! findmnt --mountpoint "${STORAGE_ROOT}" >/dev/null; then
+  echo "Refusing to deploy: ${STORAGE_ROOT} is not mounted." >&2
   exit 1
 fi
 
-if [[ ! -f ${repo_dir}/services/immich/.env ]]; then
-  echo "Create services/immich/.env from .env.example first." >&2
-  exit 1
-fi
-
-install -d -m 0755 /opt/immich /opt/openlist
-install -d -m 0755 /srv/immich-data/immich
-install -d -m 0700 /srv/immich-data/.backup-work
+install -d -m 0755 /etc/homeoss /opt/immich /opt/openlist
+install -m 0644 "${repo_dir}/config/storage.env" /etc/homeoss/storage.env
+install -m 0644 "${repo_dir}/config/schedules.env" /etc/homeoss/schedules.env
+install -d -m 0755 "${STORAGE_ROOT}/immich"
+install -d -m 0700 "${STORAGE_ROOT}/.backup-work"
 getent group familyshare >/dev/null || groupadd --system familyshare
 getent passwd ashton >/dev/null && usermod -aG familyshare ashton
 install -d -m 2770 -o root -g familyshare /srv/family-share
+install -d -m 2770 -o ashton -g familyshare "${STORAGE_ROOT}/file-backup"
 install -d -m 0700 /var/lib/immich-postgres
 
 install -m 0644 "${repo_dir}/services/immich/docker-compose.yml" \
   /opt/immich/docker-compose.yml
-install -m 0600 "${repo_dir}/services/immich/.env" /opt/immich/.env
+if [[ -s ${repo_dir}/services/immich/.env ]]; then
+  install -m 0600 "${repo_dir}/services/immich/.env" /opt/immich/.env
+elif [[ ! -s /opt/immich/.env ]]; then
+  echo "Restore /opt/immich/.env or create services/immich/.env." >&2
+  exit 1
+fi
 
 install -m 0644 "${repo_dir}/services/openlist/docker-compose.yml" \
   /opt/openlist/docker-compose.yml
@@ -44,14 +48,15 @@ openlist_gid=$(awk -F= '$1 == "OPENLIST_GID" {print $2}' /opt/openlist/.env)
 chown -R "${openlist_uid}:${openlist_gid}" /opt/openlist/data
 
 docker compose -f /opt/immich/docker-compose.yml \
-  --env-file /opt/immich/.env config --quiet
+  --env-file /etc/homeoss/storage.env --env-file /opt/immich/.env \
+  config --quiet
 docker compose -f /opt/openlist/docker-compose.yml \
   --env-file /opt/openlist/.env config --quiet
 
 docker compose -f /opt/immich/docker-compose.yml \
-  --env-file /opt/immich/.env pull
+  --env-file /etc/homeoss/storage.env --env-file /opt/immich/.env pull
 docker compose -f /opt/immich/docker-compose.yml \
-  --env-file /opt/immich/.env up -d
+  --env-file /etc/homeoss/storage.env --env-file /opt/immich/.env up -d
 
 docker compose -f /opt/openlist/docker-compose.yml \
   --env-file /opt/openlist/.env pull

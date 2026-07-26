@@ -10,6 +10,15 @@ home LAN through:
 | WebDAV | `http://myhome.server:8080/family/` |
 | SFTP | `sftp://ashton@myhome.server/srv/family-share` |
 
+Large files intended for versioned backup use the external-disk share:
+
+| Protocol | Address |
+|---|---|
+| SMB2/SMB3 | `\\myhome.server\FileBackup` |
+| NFSv4 | `myhome.server:/srv/hdd_storage/file-backup` |
+| WebDAV | `http://myhome.server:8080/file-backup/` |
+| SFTP | `sftp://ashton@myhome.server/srv/hdd_storage/file-backup` |
+
 SMB and WebDAV authenticate as `ashton`. Their password databases are runtime
 secrets and are excluded from Git. NFS is restricted to `192.168.30.0/24` and
 uses root squashing. SFTP uses the existing SSH account.

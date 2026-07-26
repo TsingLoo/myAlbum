@@ -2,6 +2,7 @@
 set -Eeuo pipefail
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+source "${repo_dir}/config/storage.env"
 webdav_secret=/home/ashton/.config/homeoss/family-webdav.htpasswd
 
 if [[ ${EUID} -ne 0 ]]; then
@@ -21,16 +22,28 @@ getent group familyshare >/dev/null || groupadd --system familyshare
 getent passwd ashton >/dev/null && usermod -aG familyshare ashton
 usermod -aG familyshare www-data
 install -d -m 2770 -o root -g familyshare /srv/family-share
+if ! findmnt --mountpoint "${STORAGE_ROOT}" >/dev/null; then
+  echo "Refusing to share files: ${STORAGE_ROOT} is not mounted." >&2
+  exit 1
+fi
+install -d -m 2770 -o ashton -g familyshare "${STORAGE_ROOT}/file-backup"
+install -d -m 0755 /etc/homeoss
+install -m 0644 "${repo_dir}/config/storage.env" /etc/homeoss/storage.env
 
-install -m 0644 "${repo_dir}/sharing/samba/family-share.conf" \
-  /etc/samba/smb.conf
+sed "s#@STORAGE_ROOT@#${STORAGE_ROOT}#g" \
+  "${repo_dir}/sharing/samba/family-share.conf" >/etc/samba/smb.conf
+chmod 0644 /etc/samba/smb.conf
 install -d -m 0755 /etc/exports.d
-install -m 0644 "${repo_dir}/sharing/nfs/family-share.exports" \
-  /etc/exports.d/family-share.exports
+sed "s#@STORAGE_ROOT@#${STORAGE_ROOT}#g" \
+  "${repo_dir}/sharing/nfs/family-share.exports" \
+  >/etc/exports.d/family-share.exports
+chmod 0644 /etc/exports.d/family-share.exports
 install -m 0644 "${repo_dir}/sharing/apache/ports.conf" \
   /etc/apache2/ports.conf
-install -m 0644 "${repo_dir}/sharing/apache/family-webdav.conf" \
-  /etc/apache2/sites-available/family-webdav.conf
+sed "s#@STORAGE_ROOT@#${STORAGE_ROOT}#g" \
+  "${repo_dir}/sharing/apache/family-webdav.conf" \
+  >/etc/apache2/sites-available/family-webdav.conf
+chmod 0644 /etc/apache2/sites-available/family-webdav.conf
 install -m 0640 -o root -g www-data "${webdav_secret}" \
   /etc/apache2/family-webdav.htpasswd
 

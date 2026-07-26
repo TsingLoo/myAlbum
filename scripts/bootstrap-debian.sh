@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+
 if [[ ${EUID} -ne 0 ]]; then
   echo "Run this script with sudo." >&2
   exit 1
@@ -29,7 +31,9 @@ apt-get install -y docker-ce docker-ce-cli containerd.io \
   docker-buildx-plugin docker-compose-plugin
 systemctl enable --now docker
 
-install -d -m 0755 /opt/immich /opt/openlist
+install -d -m 0755 /etc/homeoss /opt/immich /opt/openlist
+install -m 0644 "${repo_dir}/config/storage.env" /etc/homeoss/storage.env
+install -m 0644 "${repo_dir}/config/schedules.env" /etc/homeoss/schedules.env
 install -d -m 0700 /var/lib/immich-postgres
 getent group familyshare >/dev/null || groupadd --system familyshare
 getent passwd ashton >/dev/null && usermod -aG familyshare ashton

@@ -1,0 +1,11 @@
+[Unit]
+Description=Scheduled Kopia repository replication to China Mobile Cloud
+
+[Timer]
+OnCalendar=@KOPIA_CLOUD_SYNC_DAYS@ *-*-* @KOPIA_CLOUD_SYNC_TIME@:00 @SCHEDULE_TIMEZONE@
+RandomizedDelaySec=@KOPIA_CLOUD_SYNC_RANDOM_DELAY@
+Persistent=true
+Unit=kopia-cloud-sync.service
+
+[Install]
+WantedBy=timers.target

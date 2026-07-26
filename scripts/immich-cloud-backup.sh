@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-readonly media_root=/srv/immich-data/immich
+readonly storage_config=${HOMEOSS_STORAGE_CONFIG:-/etc/homeoss/storage.env}
+source "${storage_config}"
+readonly media_root=${STORAGE_ROOT}/immich
+readonly media_archive_root=${media_root#/}
 readonly immich_config=/opt/immich
 readonly secret_file=/home/ashton/.config/homeoss/openlist-backup.env
 readonly age_identity=/home/ashton/.config/homeoss/backup-age-key.txt
 readonly age_recipient=/home/ashton/.config/homeoss/backup-age-recipient.txt
 readonly report_sender=/usr/local/sbin/send-backup-report
+readonly ping_secret=/home/ashton/.config/homeoss/healthchecks-pings.env
+readonly ping_helper=/usr/local/lib/homeoss/healthchecks-ping.sh
 # Keep large transient archives off the internal system SSD.
-readonly work_root=/srv/immich-data/.backup-work
+readonly work_root=${STORAGE_ROOT}/.backup-work
 readonly success_state=/var/lib/homeoss/immich-cloud-backup.last-success
 readonly generation="immich-$(date +%Y-%m-%dT%H%M%S)"
 readonly work_dir="${work_root}/${generation}"
@@ -23,6 +28,12 @@ photo_count=0
 video_count=0
 source_bytes=0
 archive_bytes=0
+
+if [[ -r ${ping_secret} && -r ${ping_helper} ]]; then
+  source "${ping_secret}"
+  source "${ping_helper}"
+  healthchecks_ping "${HEALTHCHECK_IMMICH_CLOUD_BACKUP_URL:-}" /start
+fi
 
 log() {
   printf '%s %s\n' "$(date --iso-8601=seconds)" "$*"
@@ -62,6 +73,11 @@ finish() {
     status=SUCCESS
   else
     status=FAILED
+  fi
+
+  if declare -F healthchecks_ping >/dev/null; then
+    healthchecks_ping "${HEALTHCHECK_IMMICH_CLOUD_BACKUP_URL:-}" \
+      "/${result}"
   fi
 
   if [[ -x ${report_sender} ]]; then
@@ -105,8 +121,8 @@ for path in "${media_root}" "${immich_config}/.env" "${secret_file}" \
   fi
 done
 
-if ! findmnt --mountpoint /srv/immich-data >/dev/null; then
-  echo "/srv/immich-data is not mounted; refusing to back up." >&2
+if ! findmnt --mountpoint "${STORAGE_ROOT}" >/dev/null; then
+  echo "${STORAGE_ROOT} is not mounted; refusing to back up." >&2
   exit 1
 fi
 
@@ -178,10 +194,10 @@ tar \
   --numeric-owner \
   --warning=no-file-changed \
   -C / \
-  srv/immich-data/immich/library \
-  srv/immich-data/immich/upload \
-  srv/immich-data/immich/profile \
-  srv/immich-data/immich/backups \
+  "${media_archive_root}/library" \
+  "${media_archive_root}/upload" \
+  "${media_archive_root}/profile" \
+  "${media_archive_root}/backups" \
   opt/immich \
   etc/fstab \
   -C "${work_dir}" \

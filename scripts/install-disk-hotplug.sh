@@ -8,6 +8,9 @@ if [[ ${EUID} -ne 0 ]]; then
   exit 1
 fi
 
+install -d -m 0755 /etc/homeoss
+install -m 0644 "${repo_dir}/config/storage.env" /etc/homeoss/storage.env
+
 install -m 0750 "${repo_dir}/scripts/immich-disk-hotplug.sh" \
   /usr/local/sbin/immich-disk-hotplug
 install -m 0644 "${repo_dir}/systemd/immich-disk-hotplug.service" \

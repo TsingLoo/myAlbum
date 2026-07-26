@@ -1,12 +1,12 @@
 [Unit]
-Description=Encrypted Immich backup to China Mobile Cloud
+Description=Replicate the Kopia repository to China Mobile Cloud through OpenList
 Requires=docker.service
 After=docker.service network-online.target
 Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/sbin/immich-cloud-backup
+ExecStart=/usr/local/sbin/kopia-cloud-sync
 Nice=10
 IOSchedulingClass=best-effort
 IOSchedulingPriority=7

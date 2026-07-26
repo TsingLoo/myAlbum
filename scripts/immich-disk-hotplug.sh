@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-readonly mountpoint=/srv/immich-data
+readonly storage_config=${HOMEOSS_STORAGE_CONFIG:-/etc/homeoss/storage.env}
+source "${storage_config}"
+readonly mountpoint=${STORAGE_ROOT}
 readonly media_root="${mountpoint}/immich"
 readonly disk_uuid=8551ca9f-2f26-4af4-8802-8628e5e0a7e8
 readonly markers=(backups encoded-video library profile thumbs upload)

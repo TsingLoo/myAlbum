@@ -8,6 +8,8 @@
 **/*.db
 **/*.sqlite*
 secrets/
+*.tar.age
+*.identity
 
 # Generated archives and logs
 *.age

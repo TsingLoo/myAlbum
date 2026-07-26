@@ -1,0 +1,8 @@
+[Unit]
+Description=Report Kopia local snapshot freshness to Healthchecks
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/kopia-snapshot-healthcheck

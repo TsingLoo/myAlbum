@@ -12,7 +12,7 @@ Captured on 2026-07-25.
 | Internal disk | 256 GB SATA SSD (`/dev/sda`) |
 | Media disk | 2 TB Toshiba USB HDD (`/dev/sdb`) |
 | Media filesystem | ext4, UUID `8551ca9f-2f26-4af4-8802-8628e5e0a7e8` |
-| Media mount | `/srv/immich-data`, `noatime,nofail` |
+| Shared storage mount | `/srv/hdd_storage`, `noatime,nofail` |
 | LAN DNS name | `myhome.server` |
 | Network failover | `eno1` preferred; `wlo2` joins `TheNet_AX`/`TheNet` only without wired carrier |
 | Docker | 29.6.2 |
