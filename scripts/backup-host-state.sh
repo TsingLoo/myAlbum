@@ -23,6 +23,8 @@ done
 
 state_paths=(
   home/ashton/.config/homeoss
+  home/ashton/.config/syncthing
+  home/ashton/.local/state/syncthing
   opt/immich/.env
   opt/openlist/.env
   opt/openlist/data

@@ -60,6 +60,8 @@ fi
 
 run_step "Install Kopia and its local snapshot policy" \
   "${repo_dir}/scripts/install-kopia.sh"
+run_step "Install Syncthing" \
+  "${repo_dir}/scripts/install-syncthing.sh"
 run_step "Install Kopia cloud replication" \
   "${repo_dir}/scripts/install-kopia-cloud-sync.sh"
 run_step "Install the Immich cloud-backup timer" \

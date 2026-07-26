@@ -18,6 +18,7 @@ Reproducible configuration for the Debian home photo server at
 - SMB, NFS, WebDAV, and SFTP access to the family share
 - Kopia snapshots of `/srv/hdd_storage/file-backup`
 - Healthchecks dashboard for scheduled jobs on port `8000`
+- Syncthing continuous file synchronization on port `8384`
 
 No passwords, cloud tokens, databases, photos, or generated backups belong in
 this repository.
@@ -95,6 +96,18 @@ sudo ./scripts/install-kopia.sh
 The web interface is then available at `http://myhome.server:51515`. Runtime
 credentials are generated in `/home/ashton/.config/homeoss/kopia.env` and must
 not be committed. See [docs/file-backup.md](docs/file-backup.md).
+
+## File synchronization
+
+Install Syncthing as the `ashton` user with:
+
+```bash
+sudo ./scripts/install-syncthing.sh
+```
+
+The web interface is available at `http://myhome.server:8384`. Its generated
+credentials are stored in `/home/ashton/.config/homeoss/syncthing.env`.
+Synced folders live below `/home/ashton/Sync` on the internal SSD.
 
 Replicate the encrypted Kopia repository to China Mobile Cloud through
 OpenList with:

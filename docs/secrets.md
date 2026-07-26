@@ -26,6 +26,7 @@ Store these in a password manager and in an offline recovery record:
 - China Mobile Cloud account recovery details
 - backup encryption private key
 - `/home/ashton/.config/homeoss/kopia.env` (repository and web UI passwords)
+- `/home/ashton/.config/homeoss/syncthing.env` (web UI credentials)
 - Wi-Fi PSKs in `/etc/wpa_supplicant/wpa_supplicant-wlo2.conf`
 - Samba account database and the WebDAV htpasswd file
 
