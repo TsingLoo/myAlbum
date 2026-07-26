@@ -13,7 +13,7 @@ Reproducible configuration for the Debian home photo server at
 - UUID-based systemd automount and udev recovery after USB disk reinsertion
 - PostgreSQL data on the internal SSD at `/var/lib/immich-postgres`
 - Pinned Immich release and machine-learning model selection
-- Elastic internal-SSD share at `/srv/family-share`
+- LAN share on the internal SSD at `/srv/lan-share`
 - Backup working data on the external disk at `/srv/hdd_storage/.backup-work`
 - SMB, NFS, WebDAV, and SFTP access to the family share
 - Kopia snapshots of `/srv/hdd_storage/file-backup`

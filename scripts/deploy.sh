@@ -21,7 +21,10 @@ install -d -m 0755 "${STORAGE_ROOT}/immich"
 install -d -m 0700 "${STORAGE_ROOT}/.backup-work"
 getent group familyshare >/dev/null || groupadd --system familyshare
 getent passwd ashton >/dev/null && usermod -aG familyshare ashton
-install -d -m 2770 -o root -g familyshare /srv/family-share
+if [[ -d /srv/family-share && ! -e /srv/lan-share ]]; then
+  mv /srv/family-share /srv/lan-share
+fi
+install -d -m 2770 -o root -g familyshare /srv/lan-share
 install -d -m 2770 -o ashton -g familyshare "${STORAGE_ROOT}/file-backup"
 install -d -m 0700 /var/lib/immich-postgres
 

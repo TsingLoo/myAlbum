@@ -21,7 +21,10 @@ fi
 getent group familyshare >/dev/null || groupadd --system familyshare
 getent passwd ashton >/dev/null && usermod -aG familyshare ashton
 usermod -aG familyshare www-data
-install -d -m 2770 -o root -g familyshare /srv/family-share
+if [[ -d /srv/family-share && ! -e /srv/lan-share ]]; then
+  mv /srv/family-share /srv/lan-share
+fi
+install -d -m 2770 -o root -g familyshare /srv/lan-share
 if ! findmnt --mountpoint "${STORAGE_ROOT}" >/dev/null; then
   echo "Refusing to share files: ${STORAGE_ROOT} is not mounted." >&2
   exit 1

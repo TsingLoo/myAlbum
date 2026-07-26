@@ -37,6 +37,9 @@ install -m 0644 "${repo_dir}/config/schedules.env" /etc/homeoss/schedules.env
 install -d -m 0700 /var/lib/immich-postgres
 getent group familyshare >/dev/null || groupadd --system familyshare
 getent passwd ashton >/dev/null && usermod -aG familyshare ashton
-install -d -m 2770 -o root -g familyshare /srv/family-share
+if [[ -d /srv/family-share && ! -e /srv/lan-share ]]; then
+  mv /srv/family-share /srv/lan-share
+fi
+install -d -m 2770 -o root -g familyshare /srv/lan-share
 
 echo "Docker installation complete."

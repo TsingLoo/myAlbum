@@ -28,7 +28,7 @@ Large transient cloud-backup files are written to
 `/srv/hdd_storage/.backup-work` on the external disk so they cannot fill the
 internal system SSD. Successful jobs remove their generation directory.
 
-`/srv/family-share` is an elastic directory on the internal SSD. It has no
+`/srv/lan-share` is an elastic directory on the internal SSD. It has no
 preallocated size and consumes space only as files are added. Access is
 controlled by the `familyshare` group; network-sharing services should grant
 write access through that group.

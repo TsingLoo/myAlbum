@@ -1,14 +1,14 @@
-# Family network share
+# LAN network share
 
-The elastic internal-SSD directory `/srv/family-share` is exposed only on the
+The elastic internal-SSD directory `/srv/lan-share` is exposed only on the
 home LAN through:
 
 | Protocol | Address |
 |---|---|
-| SMB2/SMB3 | `\\myhome.server\Family` |
-| NFSv4 | `myhome.server:/srv/family-share` |
-| WebDAV | `http://myhome.server:8080/family/` |
-| SFTP | `sftp://ashton@myhome.server/srv/family-share` |
+| SMB2/SMB3 | `\\myhome.server\LanShare` |
+| NFSv4 | `myhome.server:/srv/lan-share` |
+| WebDAV | `http://myhome.server:8080/lan-share/` |
+| SFTP | `sftp://ashton@myhome.server/srv/lan-share` |
 
 Large files intended for versioned backup use the external-disk share:
 
@@ -30,7 +30,7 @@ The directory has no preallocated capacity. Monitor the system SSD and avoid
 letting it exceed 85% usage:
 
 ```bash
-df -h /srv/family-share
+df -h /srv/lan-share
 ```
 
 Reinstall with `sudo ./scripts/install-family-sharing.sh` after recreating the
