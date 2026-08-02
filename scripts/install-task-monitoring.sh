@@ -16,6 +16,8 @@ install -m 0644 "${repo_dir}/config/storage.env" \
   /etc/homeoss/storage.env
 install -m 0644 "${repo_dir}/config/kopia-cloud-sync.env" \
   /etc/homeoss/kopia-cloud-sync.env
+install -m 0644 "${repo_dir}/config/immich-kopia-cloud-sync.env" \
+  /etc/homeoss/immich-kopia-cloud-sync.env
 install -m 0644 "${repo_dir}/config/schedules.env" \
   /etc/homeoss/schedules.env
 install -d -m 0755 /usr/local/lib/homeoss
@@ -25,8 +27,12 @@ install -m 0750 "${repo_dir}/scripts/kopia-snapshot-healthcheck.sh" \
   /usr/local/sbin/kopia-snapshot-healthcheck
 install -m 0750 "${repo_dir}/scripts/immich-cloud-backup.sh" \
   /usr/local/sbin/immich-cloud-backup
+install -m 0750 "${repo_dir}/scripts/immich-kopia-backup.sh" \
+  /usr/local/sbin/immich-kopia-backup
 install -m 0750 "${repo_dir}/scripts/kopia-cloud-sync.sh" \
   /usr/local/sbin/kopia-cloud-sync
+install -m 0750 "${repo_dir}/scripts/append-backup-log.sh" \
+  /usr/local/sbin/append-backup-log
 install -m 0644 "${repo_dir}/systemd/kopia-snapshot-healthcheck.service" \
   /etc/systemd/system/kopia-snapshot-healthcheck.service
 sed \
@@ -46,23 +52,44 @@ sed \
   >/etc/systemd/system/kopia-cloud-sync.timer
 install -m 0644 "${repo_dir}/systemd/immich-cloud-backup.service" \
   /etc/systemd/system/immich-cloud-backup.service
+install -m 0644 "${repo_dir}/systemd/immich-kopia-backup.service" \
+  /etc/systemd/system/immich-kopia-backup.service
+install -m 0644 "${repo_dir}/systemd/immich-kopia-cloud-sync.service" \
+  /etc/systemd/system/immich-kopia-cloud-sync.service
 sed \
-  -e "s#@IMMICH_BACKUP_DAYS@#${IMMICH_BACKUP_DAYS}#g" \
   -e "s#@IMMICH_BACKUP_TIME@#${IMMICH_BACKUP_TIME}#g" \
   -e "s#@IMMICH_BACKUP_RANDOM_DELAY@#${IMMICH_BACKUP_RANDOM_DELAY}#g" \
+  -e "s#@SCHEDULE_TIMEZONE@#${SCHEDULE_TIMEZONE}#g" \
+  "${repo_dir}/systemd/immich-kopia-backup.timer" \
+  >/etc/systemd/system/immich-kopia-backup.timer
+sed \
+  -e "s#@IMMICH_KOPIA_CLOUD_SYNC_TIME@#${IMMICH_KOPIA_CLOUD_SYNC_TIME}#g" \
+  -e "s#@IMMICH_KOPIA_CLOUD_SYNC_RANDOM_DELAY@#${IMMICH_KOPIA_CLOUD_SYNC_RANDOM_DELAY}#g" \
+  -e "s#@SCHEDULE_TIMEZONE@#${SCHEDULE_TIMEZONE}#g" \
+  "${repo_dir}/systemd/immich-kopia-cloud-sync.timer" \
+  >/etc/systemd/system/immich-kopia-cloud-sync.timer
+sed \
+  -e "s#@IMMICH_FULL_BACKUP_TIME@#${IMMICH_FULL_BACKUP_TIME}#g" \
+  -e "s#@IMMICH_FULL_BACKUP_RANDOM_DELAY@#${IMMICH_FULL_BACKUP_RANDOM_DELAY}#g" \
   -e "s#@SCHEDULE_TIMEZONE@#${SCHEDULE_TIMEZONE}#g" \
   "${repo_dir}/systemd/immich-cloud-backup.timer" \
   >/etc/systemd/system/immich-cloud-backup.timer
 chmod 0644 \
   /etc/systemd/system/kopia-snapshot-healthcheck.timer \
   /etc/systemd/system/kopia-cloud-sync.timer \
-  /etc/systemd/system/immich-cloud-backup.timer
+  /etc/systemd/system/immich-cloud-backup.timer \
+  /etc/systemd/system/immich-kopia-backup.timer \
+  /etc/systemd/system/immich-kopia-cloud-sync.timer
 
 systemctl daemon-reload
 systemctl disable --now immich-backup-healthcheck.timer 2>/dev/null || true
 systemctl enable --now kopia-snapshot-healthcheck.timer
 systemctl enable --now kopia-cloud-sync.timer
-systemctl restart immich-cloud-backup.timer kopia-cloud-sync.timer
+systemctl enable --now immich-kopia-backup.timer
+systemctl enable --now immich-kopia-cloud-sync.timer
+systemctl restart immich-cloud-backup.timer immich-kopia-backup.timer \
+  kopia-cloud-sync.timer immich-kopia-cloud-sync.timer
 systemctl start kopia-snapshot-healthcheck.service
 systemctl list-timers kopia-snapshot-healthcheck.timer \
-  kopia-cloud-sync.timer --no-pager
+  kopia-cloud-sync.timer immich-cloud-backup.timer \
+  immich-kopia-backup.timer immich-kopia-cloud-sync.timer --no-pager

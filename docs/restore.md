@@ -32,9 +32,11 @@ Restore these folders to `/srv/hdd_storage/immich`:
 `thumbs` and `encoded-video` are optional and can be regenerated.
 
 The encrypted host-state bundle includes the consistent PostgreSQL directory.
-If it is unavailable, use Immich's supported restore workflow with the matching
-`.sql.gz` cloud backup. The filesystem and database must come from the same
-backup generation.
+If it is unavailable, restore one `/immich` Kopia snapshot and use its
+`backups/homeoss-kopia-database.sql.gz` with Immich's supported restore
+workflow. The snapshot keeps the filesystem, database dump, and deployment
+configuration together. The monthly Age archive remains another recovery
+source.
 
 Machine-learning model files are a disposable Docker cache and are not included
 in the cloud archive. The pinned models in the Compose file are downloaded

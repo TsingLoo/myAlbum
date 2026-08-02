@@ -1,11 +1,9 @@
 services:
   kopia:
-    image: kopia/kopia:0.22.3
+    extends:
+      file: ../kopia-common.yml
+      service: kopia-common
     container_name: kopia
-    hostname: home-server
-    restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     ports:
       - "51515:51515"
     command:
@@ -15,10 +13,6 @@ services:
       - --address=0.0.0.0:51515
       - --server-username=${KOPIA_SERVER_USERNAME}
       - --server-password=${KOPIA_SERVER_PASSWORD}
-    environment:
-      KOPIA_PASSWORD: ${KOPIA_PASSWORD}
-      USER: ashton
-      TZ: Asia/Hong_Kong
     volumes:
       - /opt/kopia/config:/app/config
       - /opt/kopia/cache:/app/cache

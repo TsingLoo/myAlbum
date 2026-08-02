@@ -1,10 +1,10 @@
 [Unit]
-Description=Run the weekly encrypted Immich cloud backup
+Description=Run the monthly full encrypted Immich cloud backup
 
 [Timer]
-OnCalendar=@IMMICH_BACKUP_DAYS@ *-*-* @IMMICH_BACKUP_TIME@:00 @SCHEDULE_TIMEZONE@
+OnCalendar=Tue *-*-01..07 @IMMICH_FULL_BACKUP_TIME@:00 @SCHEDULE_TIMEZONE@
 Persistent=true
-RandomizedDelaySec=@IMMICH_BACKUP_RANDOM_DELAY@
+RandomizedDelaySec=@IMMICH_FULL_BACKUP_RANDOM_DELAY@
 Unit=immich-cloud-backup.service
 
 [Install]

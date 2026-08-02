@@ -10,6 +10,7 @@ readonly secret_file=/home/ashton/.config/homeoss/openlist-backup.env
 readonly age_identity=/home/ashton/.config/homeoss/backup-age-key.txt
 readonly age_recipient=/home/ashton/.config/homeoss/backup-age-recipient.txt
 readonly report_sender=/usr/local/sbin/send-backup-report
+readonly backup_logger=/usr/local/sbin/append-backup-log
 readonly ping_secret=/home/ashton/.config/homeoss/healthchecks-pings.env
 readonly ping_helper=/usr/local/lib/homeoss/healthchecks-ping.sh
 # Keep large transient archives off the internal system SSD.
@@ -29,10 +30,16 @@ video_count=0
 source_bytes=0
 archive_bytes=0
 
+exec 9>/run/lock/homeoss-immich-backup.lock
+if ! flock --nonblock 9; then
+  echo "Another Immich backup is already running." >&2
+  exit 1
+fi
+
 if [[ -r ${ping_secret} && -r ${ping_helper} ]]; then
   source "${ping_secret}"
   source "${ping_helper}"
-  healthchecks_ping "${HEALTHCHECK_IMMICH_CLOUD_BACKUP_URL:-}" /start
+  healthchecks_ping "${HEALTHCHECK_IMMICH_FULL_CLOUD_BACKUP_URL:-}" /start
 fi
 
 log() {
@@ -75,8 +82,13 @@ finish() {
     status=FAILED
   fi
 
+  if [[ -x ${backup_logger} ]]; then
+    "${backup_logger}" immich-full-cloud-backup "${status}" \
+      "generation=${generation} stage=${stage}" || true
+  fi
+
   if declare -F healthchecks_ping >/dev/null; then
-    healthchecks_ping "${HEALTHCHECK_IMMICH_CLOUD_BACKUP_URL:-}" \
+    healthchecks_ping "${HEALTHCHECK_IMMICH_FULL_CLOUD_BACKUP_URL:-}" \
       "/${result}"
   fi
 

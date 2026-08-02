@@ -1,0 +1,11 @@
+[Unit]
+Description=Replicate the independent Immich Kopia repository every day
+
+[Timer]
+OnCalendar=*-*-* @IMMICH_KOPIA_CLOUD_SYNC_TIME@:00 @SCHEDULE_TIMEZONE@
+RandomizedDelaySec=@IMMICH_KOPIA_CLOUD_SYNC_RANDOM_DELAY@
+Persistent=true
+Unit=immich-kopia-cloud-sync.service
+
+[Install]
+WantedBy=timers.target

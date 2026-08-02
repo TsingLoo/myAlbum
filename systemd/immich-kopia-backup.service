@@ -1,12 +1,12 @@
 [Unit]
-Description=Full encrypted Immich archive to China Mobile Cloud
+Description=Create a database-consistent incremental Immich Kopia snapshot
 Requires=docker.service
 After=docker.service network-online.target
 Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/sbin/immich-cloud-backup
+ExecStart=/usr/local/sbin/immich-kopia-backup
 Nice=10
 IOSchedulingClass=best-effort
 IOSchedulingPriority=7

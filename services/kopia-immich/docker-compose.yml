@@ -1,0 +1,22 @@
+services:
+  kopia-immich:
+    extends:
+      file: ../kopia-common.yml
+      service: kopia-common
+    container_name: kopia-immich
+    ports:
+      - "51516:51516"
+    command:
+      - server
+      - start
+      - --insecure
+      - --address=0.0.0.0:51516
+      - --server-username=${KOPIA_SERVER_USERNAME}
+      - --server-password=${KOPIA_SERVER_PASSWORD}
+    volumes:
+      - /opt/kopia-immich/config:/app/config
+      - /opt/kopia-immich/cache:/app/cache
+      - /opt/kopia-immich/logs:/app/logs
+      - ${STORAGE_ROOT}/immich:/immich/data:ro
+      - /opt/immich:/immich/config:ro
+      - ${STORAGE_ROOT}/kopia-immich-repository:/repository

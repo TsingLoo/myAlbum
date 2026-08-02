@@ -1,0 +1,14 @@
+services:
+  kopia-common:
+    image: kopia/kopia:0.22.3
+    hostname: home-server
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    dns:
+      - 192.168.30.1
+      - 223.5.5.5
+    environment:
+      KOPIA_PASSWORD: ${KOPIA_PASSWORD}
+      USER: ashton
+      TZ: Asia/Hong_Kong

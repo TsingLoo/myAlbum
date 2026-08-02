@@ -32,11 +32,11 @@ Store these in a password manager and in an offline recovery record:
 
 The encrypted cloud backup should include a copy of the exact Immich `.env`
 used for that backup generation. Git should only contain `.env.example`.
-## Tencent SES backup reports
+## SMTP backup reports
 
-The backup report sender reads Tencent CAM credentials from
-`/home/ashton/.config/homeoss/tencent-ses.env`. Keep this file mode `0600` and
-never commit it. The CAM user needs only permission to call `ses:SendEmail`.
+The backup report sender reuses the SMTP settings in
+`/home/ashton/.config/homeoss/healthchecks.env`. Set `BACKUP_REPORT_TO` to the
+recipient address. Keep this file mode `0600` and never commit it.
 # Secret and runtime-state recovery
 
 Git contains only reproducible, non-secret configuration. The following state

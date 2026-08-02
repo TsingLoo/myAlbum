@@ -1,0 +1,11 @@
+[Unit]
+Description=Create the daily incremental Immich backup
+
+[Timer]
+OnCalendar=*-*-* @IMMICH_BACKUP_TIME@:00 @SCHEDULE_TIMEZONE@
+Persistent=true
+RandomizedDelaySec=@IMMICH_BACKUP_RANDOM_DELAY@
+Unit=immich-kopia-backup.service
+
+[Install]
+WantedBy=timers.target

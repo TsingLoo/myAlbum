@@ -35,11 +35,17 @@ OpenWrt schedule from the repository workstation with:
 ./scripts/install-openwrt-schedule.py
 ```
 
-## Cloud backup
+## Immich backup
 
-`scripts/immich-cloud-backup.sh` creates a consistent PostgreSQL dump, archives
-the critical Immich originals and configuration, encrypts the stream with Age,
-splits it into 1 GiB parts, and uploads through the OpenList HTTP API.
+`scripts/immich-kopia-backup.sh` creates a consistent PostgreSQL dump and then
+takes a deduplicated Kopia snapshot of the critical Immich originals and
+configuration. Immich uses an independent encrypted repository at
+`/srv/hdd_storage/kopia-immich-repository`, which is replicated incrementally
+to `/kopia-immich-repository` in China Mobile Cloud through OpenList every day.
+
+`scripts/immich-cloud-backup.sh` remains as an independent full-archive fallback.
+It encrypts each archive with Age, splits it into 1 GiB parts, and runs on the
+first Tuesday of each month.
 
 Install the systemd timer with:
 
@@ -47,7 +53,10 @@ Install the systemd timer with:
 sudo ./scripts/install-backup-service.sh
 ```
 
-The timer runs every Tuesday at 02:45 with a random delay of up to 30 minutes.
+The incremental timer runs daily at 02:45 with a random delay of up to 10
+minutes, and its independent cloud sync runs at 09:00. The full archive starts
+at 01:30 on the first Tuesday of each month, with a random delay of up to 30
+minutes.
 
 ## Fresh-machine recovery
 

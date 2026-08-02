@@ -67,6 +67,7 @@ fi
 
 install -m 0644 "${repo_dir}/services/kopia/docker-compose.yml" \
   /opt/kopia/docker-compose.yml
+install -m 0644 "${repo_dir}/services/kopia-common.yml" /opt/kopia-common.yml
 install -m 0644 "${repo_dir}/services/immich/docker-compose.yml" \
   /opt/immich/docker-compose.yml
 install -m 0750 "${repo_dir}/scripts/immich-disk-hotplug.sh" \

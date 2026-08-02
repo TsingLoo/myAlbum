@@ -1,0 +1,19 @@
+[Unit]
+Description=Replicate the independent Immich Kopia repository to China Mobile Cloud
+Requires=docker.service
+After=docker.service network-online.target immich-kopia-backup.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=KOPIA_SYNC_CONFIG=/etc/homeoss/immich-kopia-cloud-sync.env
+Environment=KOPIA_SECRET=/home/ashton/.config/homeoss/kopia-immich.env
+Environment=KOPIA_COMPOSE_FILE=/opt/kopia-immich/docker-compose.yml
+Environment=KOPIA_SERVICE=kopia-immich
+Environment="KOPIA_REPORT_NAME=Immich Kopia cloud sync"
+Environment=KOPIA_HEALTHCHECK_VARIABLE=HEALTHCHECK_IMMICH_KOPIA_CLOUD_SYNC_URL
+ExecStart=/usr/local/sbin/kopia-cloud-sync
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+TimeoutStartSec=infinity

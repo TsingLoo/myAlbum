@@ -18,8 +18,11 @@ install -m 0644 "${repo_dir}/config/schedules.env" \
   /etc/homeoss/schedules.env
 install -m 0750 "${repo_dir}/scripts/kopia-cloud-sync.sh" \
   /usr/local/sbin/kopia-cloud-sync
+install -m 0750 "${repo_dir}/scripts/append-backup-log.sh" \
+  /usr/local/sbin/append-backup-log
 install -m 0644 "${repo_dir}/services/kopia/docker-compose.yml" \
   /opt/kopia/docker-compose.yml
+install -m 0644 "${repo_dir}/services/kopia-common.yml" /opt/kopia-common.yml
 install -m 0644 "${repo_dir}/systemd/kopia-cloud-sync.service" \
   /etc/systemd/system/kopia-cloud-sync.service
 sed \

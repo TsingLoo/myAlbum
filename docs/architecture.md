@@ -20,9 +20,11 @@ FileBackup share
 The internal SSD contains Debian, containers, and PostgreSQL. The external ext4
 disk contains Immich assets. Neither disk is itself a backup.
 
-The cloud backup must contain original assets, a consistent PostgreSQL dump,
-deployment configuration, checksums, and restore instructions. Thumbnails and
-encoded videos may be regenerated.
+The daily Kopia snapshot contains original assets, a consistent PostgreSQL
+dump, and deployment configuration. Thumbnails and encoded videos are excluded
+because they can be regenerated. The encrypted repository is synchronized
+off-site every day. A separate monthly Age archive remains available as a
+self-contained fallback.
 
 Large transient cloud-backup files are written to
 `/srv/hdd_storage/.backup-work` on the external disk so they cannot fill the
@@ -33,7 +35,9 @@ preallocated size and consumes space only as files are added. Access is
 controlled by the `familyshare` group; network-sharing services should grant
 write access through that group.
 
-Kopia reads only `/srv/hdd_storage/file-backup`. Its encrypted repository is on the
-external media disk, providing versioned recovery from accidental deletion and
-overwrites. This local repository should eventually be replicated off-site for
-protection against theft, fire, or failure of both disks.
+The FileBackup and Immich sources use separate Kopia containers, encryption
+credentials, local repositories, cloud paths, and retention policies. Their
+source mounts are read-only. The repositories are
+`/srv/hdd_storage/kopia-repository` and
+`/srv/hdd_storage/kopia-immich-repository`; their off-site replicas are
+`/kopia-repository` and `/kopia-immich-repository` in China Mobile Cloud.

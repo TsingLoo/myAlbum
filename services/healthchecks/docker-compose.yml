@@ -5,12 +5,47 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    dns:
+      - 192.168.30.1
+      - 223.5.5.5
     environment:
       ALLOWED_HOSTS: myhome.server,192.168.30.136,127.0.0.1,localhost
       DB: sqlite
       DB_NAME: /data/hc.sqlite
       DEBUG: "False"
+      DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USE_SSL: ${EMAIL_USE_SSL}
+      EMAIL_USE_TLS: ${EMAIL_USE_TLS}
       REGISTRATION_OPEN: "False"
+      SECRET_KEY: ${HEALTHCHECKS_SECRET_KEY}
+      SITE_NAME: HomeOSS Tasks
+      SITE_ROOT: http://myhome.server:8000
+      TZ: Asia/Hong_Kong
+    volumes:
+      - /opt/healthchecks/data:/data
+
+  healthchecks-sendalerts:
+    image: healthchecks/healthchecks:v4.3
+    container_name: healthchecks-sendalerts
+    restart: unless-stopped
+    command: ./manage.py sendalerts
+    dns:
+      - 192.168.30.1
+      - 223.5.5.5
+    environment:
+      DB: sqlite
+      DB_NAME: /data/hc.sqlite
+      DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USE_SSL: ${EMAIL_USE_SSL}
+      EMAIL_USE_TLS: ${EMAIL_USE_TLS}
       SECRET_KEY: ${HEALTHCHECKS_SECRET_KEY}
       SITE_NAME: HomeOSS Tasks
       SITE_ROOT: http://myhome.server:8000
